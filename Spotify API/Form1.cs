@@ -1,14 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using static Spotify_API.SpotifySearch;
-using Spotify_API;
+using static Spotify_API.Spotify;
 
 namespace Spotify_API
 {
     public partial class Form1 : Form
     {
+        SpotifySearch spotifySearch = new SpotifySearch();
 
         public Form1()
         {
@@ -18,20 +17,20 @@ namespace Spotify_API
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var Result = SearchSong(textBox1.Text);
+            var Result = spotifySearch.SearchArtist(textBox1.Text);
             var ListArtist = new List<SpotifyArtist>();
-
-            foreach (var Items in Result.tracks.items)
-            {
-                ListArtist.Add(new SpotifyArtist()
-                {
-                    ID = Items.id,
-                    Image = Items.album[0].images[0].url,
-                    Name = Items.name,
-                    Popularity = Items.popularity.ToString()
-                });
-            }
-
+             foreach (Artist Items in Result.artists.items)
+              {
+                  ListArtist.Add(new SpotifyArtist()
+                  {
+                      ID = Items.id,
+                      Followers = Items.followers.total.ToString(),
+                      Image = Items.images[0].url,
+                      Name = Items.name,
+                      Popularity = Items.popularity.ToString()
+                  });
+              }
+            
         }
     }
 }
