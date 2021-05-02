@@ -1,20 +1,18 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Spotify_API
 {
-    class SpotifyToken
+    public class SpotifyToken
     {
 
         public string Access_token { get; set; }
         public string Token_type { get; set; }
         public int Expires_in { get; set; }
+        public string scope { get; set; }
 
         public static string GetAccessToken(string ClientID, string ClientSecret)
         {
@@ -27,10 +25,10 @@ namespace Spotify_API
 
             webRequest.Method = "POST";
             webRequest.ContentType = "application/x-www-form-urlencoded";
-            webRequest.Accept = "application/json";
-            webRequest.Headers.Add("Authorization: Basic " + encode_clientid_clientsecret);
+          //  webRequest.Accept = "application/json";
+            webRequest.Headers.Add("Authorization", "Basic " + encode_clientid_clientsecret);
 
-            var request = ("grant_type=client_credentials");
+            var request = ("grant_type=client_credentials&scope=playlist-modify-public playlist-modify-private");//
             byte[] req_bytes = Encoding.ASCII.GetBytes(request);
             webRequest.ContentLength = req_bytes.Length;
 
@@ -40,7 +38,7 @@ namespace Spotify_API
                 strm.Close();
             }
 
-            string Json = "";
+            string Json;
 
             using (HttpWebResponse resp = (HttpWebResponse)webRequest.GetResponse())
             using (Stream respStr = resp.GetResponseStream())
@@ -54,5 +52,7 @@ namespace Spotify_API
             token = JsonConvert.DeserializeObject<SpotifyToken>(Json);
             return token.Access_token;
         }
+
+
     }
 }

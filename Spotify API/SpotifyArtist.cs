@@ -13,5 +13,6 @@ namespace Spotify_API
         public string Image { set; get; }
         public string Followers { set; get; }
         public string Popularity { set; get; }
+        public string Genres { set; get; }
     }
 }
